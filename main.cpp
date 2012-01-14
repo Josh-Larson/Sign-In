@@ -8,13 +8,12 @@ using namespace std;
 
 bool ncurses_clear(int rows, int cols);
 
-int main() {
+int main(int argc, char *argv[]) {
 	initscr();
 	int rows = 0, cols = 0;
 	int quit = 0;
 	getmaxyx(stdscr, rows, cols);
 	list users;
-	users.append("Josh", "Larson", "11:45:05");
 	while (quit == 0) {
 		int line = 1;
 		ncurses_clear(rows, cols);
@@ -26,12 +25,13 @@ int main() {
 			mvprintw(line, fname.length()+5, lname.c_str());
 			line++;
 		}
-		mvprintw(rows-1, 0, "Add User or Sign Out? ");
+		mvprintw(rows-2, 0, "Type in 'Help' to view function list.");
+		mvprintw(rows-1, 0, "[Team2502@localhost SignIn]$ ");
 		refresh();
 		char strc[256];
 		getstr(strc);
 		string str = strc;
-		if (strtolower(str) == "quit") {
+		if (strtolower(str) == "quit" || strtolower(str) == "exit") {
 			quit = 1;
 		} else if (strtolower(str) == "add" || strtolower(str) == "signin" || strtolower(str) == "sign in") {
 			ncurses_clear(rows, cols);
@@ -106,13 +106,21 @@ int main() {
 					break;
 				}
 			}
+		} else if (strtolower(str) == "help") {
+			ncurses_clear(rows, cols);
+			mvprintw(0, 0, "Possible Functions: (Case-Insensitive)");
+			mvprintw(1, 4, "add:      This will bring up a prompt to sign on");
+			mvprintw(2, 4, "sign in:  Same as add");
+			mvprintw(3, 4, "sign out: This will bring up a prompt to log out. Uses current time.");
+			mvprintw(4, 4, "quit:     Saves all users to the .csv file.");
+			mvprintw(5, 4, "exit:     Same as quit.");
+			mvprintw(rows-1, 0, "Press Any Key to Continue...");
+			getch();
 		}
 	}
 	ncurses_clear(rows, cols);
-	mvprintw(rows-2, 0, "Users have been saved.");
-	mvprintw(rows-1, 0, "Press any key to continue...");
-	getch();
 	endwin();
+	cout << "Users Saved.\n";
 }
 
 bool ncurses_clear(int rows, int cols) {

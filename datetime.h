@@ -1,3 +1,6 @@
+#ifndef DATETIME_H
+#define DATETIME_H
+
 #include <iostream>
 #include <ctime>
 #include <sstream>
@@ -71,3 +74,5 @@ DateTime::DateTime() {
 		STREAM >> second;
 	}
 }
+
+#endif

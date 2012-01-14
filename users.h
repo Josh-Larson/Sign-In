@@ -1,3 +1,5 @@
+#ifndef USERS_H
+#define USERS_H
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -199,11 +201,15 @@ int update_hours(string fname, string lname, int total[3]) {
 		}
 	}
 	stream.close();
-	int hour = 0;
+	float hour = 0;
 	if (total[2] > 30) total[1]++;
-	if (total[1] >= 60) { total[0]++; total[1] = 0; }
+	if (total[1] >= 60) { total[0]++; total[1] -= 60; }
+	hour = total[0] + (total[1] / 60);
 	if (found == 0) {
-		ofstream stream("hours.csv", ios::out || ios::app);
-		stream << fname << ", " << lname << ", " << 
+		ofstream stream;
+		stream.open("hours.csv", ios::out | ios::app);
+		stream << fname << ", " << lname << ", " << hour << "\n";
 	}
 }
+
+#endif
