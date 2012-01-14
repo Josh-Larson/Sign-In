@@ -193,18 +193,27 @@ int update_hours(string fname, string lname, int total[3]) {
 	string line = "";
 	int found = 0;
 	stream.open("hours.csv");
+	float hour = 0.00;
+	vector <string> lines;
+	int lpos = -1;
+	int lnum = 0;
 	while (stream.good()) {
 		getline(stream, line);
+		lines.push_back(line);
 		vector <string> items = explode(",", line);
 		if (items[0] == fname && items[1] == lname) {
 			found = 1;
+			stringstream STREAM;
+			STREAM << items[2];
+			STREAM >> hour;
+			lpos = lnum;
 		}
+		lnum++;
 	}
 	stream.close();
-	float hour = 0;
 	if (total[2] > 30) total[1]++;
 	if (total[1] >= 60) { total[0]++; total[1] -= 60; }
-	hour = total[0] + (total[1] / 60);
+	hour += total[0] + double(total[1] / 60);
 	if (found == 0) {
 		ofstream stream;
 		stream.open("hours.csv", ios::out | ios::app);
