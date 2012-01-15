@@ -132,30 +132,11 @@ int list::signout(string fname, string lname, string sign_out) {
 			return -1;
 		} else {
 			update_hours(fname, lname, diff);
-			if (1==1) {
-				vector <string> before;
-				vector <string> after;
-				int a = 0;
-				list::fnames.erase(list::fnames.begin()+pos);
-			}
-			if (1==1) {
-				vector <string> before;
-				vector <string> after;
-				int a = 0;
-				list::lnames.erase(list::lnames.begin()+pos);
-			}
-			if (1==1) {
-				vector <string> before;
-				vector <string> after;
-				int a = 0;
-				list::sign_in.erase(list::sign_in.begin()+pos);
-			}
-			if (1==1) {
-				vector <string> before;
-				vector <string> after;
-				int a = 0;
-				list::sign_out.erase(list::sign_out.begin()+pos);
-			}
+			// Erase values of the user
+			list::fnames.erase(list::fnames.begin()+pos);
+			list::lnames.erase(list::lnames.begin()+pos);
+			list::sign_in.erase(list::sign_in.begin()+pos);
+			list::sign_out.erase(list::sign_out.begin()+pos);
 			list::people--;
 		}
 	}
@@ -163,6 +144,9 @@ int list::signout(string fname, string lname, string sign_out) {
 }
 
 int update_hours(string fname, string lname, int total[3]) {
+	/*
+	 * Test if the file exists
+	 */
 	if (1==1) {
 		ifstream stream("hours.csv");
 		if (!stream.good()) {
@@ -180,6 +164,11 @@ int update_hours(string fname, string lname, int total[3]) {
 	int lnum = 0;
 	while (stream.good()) {
 		getline(stream, line);
+		/*
+		 * Append the lines into memory
+		 * Seperate the line into parts
+		 * like a .csv file
+		 */
 		lines.push_back(line);
 		vector <string> items = explode(",", line);
 		if (items.size() > 1) {
@@ -195,6 +184,11 @@ int update_hours(string fname, string lname, int total[3]) {
 		}
 	}
 	stream.close();
+	/*
+	 * Add minutes to the past total
+	 * Then change the number of minutes
+	 * from the number in the .csv file
+	 */
 	minute += (total[0]*60) + total[1];
 	ofstream stream2;
 	stream2.open("hours.csv");
