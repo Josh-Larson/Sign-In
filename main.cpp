@@ -11,12 +11,16 @@ bool ncurses_clear(int rows, int cols);
 int main(int argc, char *argv[]) {
 	initscr();
 	int rows = 0, cols = 0;
+	getmaxyx(stdscr, rows, cols);
 	int quit = 0;
 	getmaxyx(stdscr, rows, cols);
+	mousemask(ALL_MOUSE_EVENTS, NULL);
+	MEVENT event;
 	list users;
 	while (quit == 0) {
 		int line = 1;
 		ncurses_clear(rows, cols);
+		getmaxyx(stdscr, rows, cols);
 		mvprintw(0, 0, "User List:");
 		for (int i = 0; i < users.size(); i++) {
 			string fname = users.user(i, 0);
@@ -27,6 +31,7 @@ int main(int argc, char *argv[]) {
 		}
 		mvprintw(rows-2, 0, "Type in 'Help' to view function list.");
 		mvprintw(rows-1, 0, "[Team2502@localhost SignIn]$ ");
+		refresh();
 		refresh();
 		char strc[256];
 		getstr(strc);
@@ -76,6 +81,16 @@ int main(int argc, char *argv[]) {
 			users.append(fname, lname, timein);
 		} else if (strtolower(str) == "signout" || strtolower(str) == "sign out") {
 			ncurses_clear(rows, cols);
+			// Show users
+			int line = 5;
+			mvprintw(4, 0, "User List:");
+			for (int i = 0; i < users.size() && line < rows-1; i++) {
+				string fname = users.user(i, 0);
+				string lname = users.user(i, 1);
+				mvprintw(line, 4, fname.c_str());
+				mvprintw(line, fname.length()+5, lname.c_str());
+				line++;
+			}
 			mvprintw(0, 0, "First Name:   ");
 			mvprintw(1, 0, "Last Name:    ");
 			move(0, 14);
