@@ -22,18 +22,30 @@ int main(int argc, char *argv[]) {
 		ncurses_clear(rows, cols);
 		getmaxyx(stdscr, rows, cols);
 		mvprintw(0, 0, "User List:");
+		time_t _t;
+		struct tm * _timeinfo;
+		time(&_t);
+		_timeinfo = localtime(&_t);
+		char _buf[100] = "";
+		strftime(_buf, 100, "%I:%M:%S", _timeinfo);
 		for (int i = 0; i < users.size(); i++) {
 			string fname = users.user(i, 0);
 			string lname = users.user(i, 1);
 			mvprintw(line, 4, fname.c_str());
 			mvprintw(line, fname.length()+5, lname.c_str());
+			int diff[3] = {0, 0, 0};
+			stringstream STREAM;
+			STREAM << ((diff[0]*60)+diff[1]);
+			string minute = "";
+			STREAM >> minute;
+			printw(string(" ["+users.user(i, 2)+"] (" + minute + ")").c_str());
 			line++;
 		}
 		mvprintw(rows-2, 0, "Type in 'Help' to view function list.");
 		mvprintw(rows-1, 0, "[Team2502@localhost SignIn]$ ");
 		refresh();
-		refresh();
 		char strc[256];
+		halfdelay(10);
 		getstr(strc);
 		string str = strc;
 		if (strtolower(str) == "quit" || strtolower(str) == "exit") {
@@ -75,7 +87,11 @@ int main(int argc, char *argv[]) {
 				refresh();
 				getstr(strc2);
 				string str2 = strc2;
-				timein = str2;
+				if (str2.compare("") == 0) {
+					timein = buf;
+				} else {
+					timein = str2;
+				}
 			}
 			ncurses_clear(rows, cols);
 			users.append(fname, lname, timein);

@@ -8,6 +8,7 @@
 using namespace std;
 
 int update_hours(string fname, string lname, int total[3]);
+int get_diff(const int (&total)[2][3], int (&diff)[3]);
 
 class list {
 	public:
@@ -126,33 +127,10 @@ int list::signout(string fname, string lname, string sign_out) {
 			set in 24 hour time
 		*/
 		int diff[3] = {0, 0, 0};
-		// Hours
-		if (total[1][0] - total[0][0] < 0) {
-			diff[0] = (total[1][0]+12)-total[0][0];
-		} else {
-			diff[0] = total[1][0]-total[0][0];
-		}
-		// Minutes
-		if (total[1][1] - total[0][1] < 0) {
-			diff[1] = (total[1][1]+60)-total[0][1];
-			diff[0] -= 1;
-		} else {
-			diff[1] = total[1][1]-total[0][1];
-		}
-		// Seconds
-		if (total[1][2] - total[0][2] < 0) {
-			diff[2] = (total[1][2]+60)-total[0][2];
-			diff[1] -= 1;
-		} else {
-			diff[2] = total[1][2]-total[0][2];
-		}
-		if (diff[1] < 0) {
-			diff[1] + 60;
-			diff[0]--;
-		}
+		get_diff(total, diff);
 		if (diff[0] < 0 || diff[1] < 0 || diff[2] < 0) {
 			return -1;
-		} else {::
+		} else {
 			update_hours(fname, lname, diff);
 			if (1==1) {
 				vector <string> before;
@@ -229,6 +207,33 @@ int update_hours(string fname, string lname, int total[3]) {
 	}
 	if (found == 0) {
 		stream2 << fname << "," << lname << "," << minute << "\n";
+	}
+}
+
+int get_diff(const int (&total)[2][3], int (&diff)[3]) {
+	// Hours
+	if (total[1][0] - total[0][0] < 0) {
+		diff[0] = (total[1][0]+12)-total[0][0];
+	} else {
+		diff[0] = total[1][0]-total[0][0];
+	}
+	// Minutes
+	if (total[1][1] - total[0][1] < 0) {
+		diff[1] = (total[1][1]+60)-total[0][1];
+		diff[0] -= 1;
+	} else {
+		diff[1] = total[1][1]-total[0][1];
+	}
+	// Seconds
+	if (total[1][2] - total[0][2] < 0) {
+		diff[2] = (total[1][2]+60)-total[0][2];
+		diff[1] -= 1;
+	} else {
+		diff[2] = total[1][2]-total[0][2];
+	}
+	if (diff[1] < 0) {
+		diff[1] + 60;
+		diff[0]--;
 	}
 }
 
