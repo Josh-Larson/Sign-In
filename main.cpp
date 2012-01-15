@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 		string _buf2 = _buf;
 		
 		/* Cycles through Users */
-		for (int i = 0; i < users.size(); i++) {
+		for (int i = 0; i < users.size() && line < rows-2; i++) {
 			/* Retrieves User's first name and last name from the list (users) */
 			string fname = users.user(i, 0);
 			string lname = users.user(i, 1);
@@ -181,9 +181,6 @@ int main(int argc, char *argv[]) {
 					} else {
 						timein = buf;
 					}
-					endwin();
-					cout << timein << "\n";
-					return 0;
 				}
 			}
 			ncurses_clear(rows, cols);
