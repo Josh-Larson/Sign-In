@@ -245,7 +245,20 @@ int main(int argc, char *argv[]) {
 	}
 	ncurses_clear(rows, cols);
 	endwin();
-	cout << "Users Saved.\n";
+	string fname = "";
+	string lname = "";
+	time_t t;
+	struct tm * timeinfo;
+	time(&t);
+	timeinfo = localtime(&t);
+	char buf[100] = "";
+	strftime(buf, 100, "%I:%M:%S", timeinfo);
+	string buf2 = buf;
+	for (int i = 0; i < users.size(); i++) {
+		fname = users.user(i, 0);
+		lname = users.user(i, 1);
+		users.signout(fname, lname, buf2);
+	}
 }
 
 bool ncurses_clear(int rows, int cols) {
