@@ -158,7 +158,7 @@ int update_hours(string fname, string lname, int total[3]) {
 	ifstream stream("hours.csv");
 	string line = "";
 	int found = 0;
-	long minute = 0.00;
+	long minute = 0;
 	vector <string> lines;
 	int lpos = -1;
 	int lnum = 0;
