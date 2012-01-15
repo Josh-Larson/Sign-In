@@ -185,15 +185,18 @@ int list::signout(string fname, string lname, string sign_out) {
 }
 
 int update_hours(string fname, string lname, int total[3]) {
-	ifstream stream("hours.csv");
-	if (!stream.good()) {
-		ofstream s2("hours.csv");
-		s2.close();
+	if (1==1) {
+		ifstream stream("hours.csv");
+		if (!stream.good()) {
+			ofstream s2("hours.csv");
+			s2.close();
+		}
+		stream.close();
 	}
+	ifstream stream("hours.csv");
 	string line = "";
 	int found = 0;
-	stream.open("hours.csv");
-	float hour = 0.00;
+	long minute = 0.00;
 	vector <string> lines;
 	int lpos = -1;
 	int lnum = 0;
@@ -201,23 +204,31 @@ int update_hours(string fname, string lname, int total[3]) {
 		getline(stream, line);
 		lines.push_back(line);
 		vector <string> items = explode(",", line);
-		if (items[0] == fname && items[1] == lname) {
-			found = 1;
-			stringstream STREAM;
-			STREAM << items[2];
-			STREAM >> hour;
-			lpos = lnum;
+		if (items.size() > 1) {
+			if (items[0] == fname && items[1] == lname) {
+				found = 1;
+				stringstream STREAM;
+				STREAM << items[2];
+				STREAM >> minute;
+				lpos = lnum;
+				cout << "User Found (" << lpos << ")\n";
+			}
+			lnum++;
 		}
-		lnum++;
 	}
 	stream.close();
-	if (total[2] > 30) total[1]++;
-	if (total[1] >= 60) { total[0]++; total[1] -= 60; }
-	hour += total[0] + double(total[1] / 60);
+	minute += (total[0]*60) + total[1];
+	ofstream stream2;
+	stream2.open("hours.csv");
+	for (int i = 0; i < lnum; i++) {
+		if (i == lpos) {
+			stream2 << fname << "," << lname << "," << minute << "\n";
+		} else {
+			stream2 << lines[i] << "\n";
+		}
+	}
 	if (found == 0) {
-		ofstream stream;
-		stream.open("hours.csv", ios::out | ios::app);
-		stream << fname << ", " << lname << ", " << hour << "\n";
+		stream2 << fname << "," << lname << "," << minute << "\n";
 	}
 }
 
