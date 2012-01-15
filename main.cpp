@@ -156,6 +156,34 @@ int main(int argc, char *argv[]) {
 					timein = buf;
 				} else {
 					timein = str2;
+					int colons = 0;
+					for (int i = 0; i < timein.length(); i++) {
+						if (timein[i] == ':') colons++;
+					}
+					if (colons == 1) {
+						if (timein.length() == 5) {
+							// HH:MM Format
+							timein.append(":00");
+						} else if (timein.length() == 7) {
+							// HH:MMSS
+							timein.insert(5, ":");
+						}
+					} else if (colons == 0) {
+						if (timein.length() == 2) {
+							timein.append(":00:00");
+						} else if (timein.length() == 4) {
+							timein.insert(2, ":");
+							timein.append(":00");
+						} else if (timein.length() == 6) {
+							timein.insert(2, ":");
+							timein.insert(5, ":");
+						}
+					} else {
+						timein = buf;
+					}
+					endwin();
+					cout << timein << "\n";
+					return 0;
 				}
 			}
 			ncurses_clear(rows, cols);
@@ -192,7 +220,6 @@ int main(int argc, char *argv[]) {
 			// Sign out from users
 			for (int i = 0; i < users.size(); i++) {
 				if (users.user(i, 0) == fname && users.user(i, 1) == lname) {
-					signouted = 1;
 					time_t t;
 					struct tm * timeinfo;
 					time(&t);
